@@ -11,5 +11,9 @@ caddy
 We also install tailscale because it will allow us to access vaultwaden without using an public IP.
 
 
+## Notes
+
+https://gist.github.com/RagedUnicorn/a70f8540c68e0a41e3e097a2e29130f1
+
 
 

@@ -1,0 +1,115 @@
+write_files:
+  - path: /home/opc/docker-compose.yml
+    owner: opc:opc
+    permissions: '0644'
+    content: |
+      version: '3'
+      services:
+        vaultwarden:
+          image: vaultwarden/server:latest
+          container_name: vaultwarden
+          restart: always
+          environment:
+            - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+          volumes:
+            - /home/opc/vw-data:/data
+        caddy:
+          image: caddy:2
+          container_name: caddy
+          restart: always
+          ports:
+            - 80:80
+            - 443:443
+          volumes:
+            - /home/opc/caddy:/usr/bin/caddy  # Your custom build of Caddy.
+            - /home/opc/Caddyfile:/etc/caddy/Caddyfile:ro
+            - /home/opc/caddy-config:/config
+            - /home/opc/caddy-data:/data
+          environment:
+            - DOMAIN=${caddy_domain_name}     # Your domain, prefixed with http or https.
+            - EMAIL=${caddy_acme_reg_email}   # The email address to use for ACME registration.
+            - DUCKDNS_TOKEN=${caddy_duckdns_token}  # Your Duck DNS token.
+            - LOG_FILE=/home/opc/vw_access.log
+
+  - path: /home/opc/Caddyfile
+    owner: opc:opc
+    permissions: '0644'
+    content: |
+      {$DOMAIN}:443 {
+        log {
+          level INFO
+          output file {$LOG_FILE} {
+            roll_size 10MB
+            roll_keep 10
+          }
+        }
+        # Use the ACME DNS-01 challenge to get a cert for the configured domain.
+        tls {
+          dns duckdns {$DUCKDNS_TOKEN}
+        }
+        # This setting may have compatibility issues with some browsers
+        # (e.g., attachment downloading on Firefox). Try disabling this
+        # if you encounter issues.
+        encode gzip
+        # Notifications redirected to the WebSocket server
+        reverse_proxy /notifications/hub vaultwarden:3012
+        # Proxy everything else to Rocket
+        reverse_proxy vaultwarden:80
+      }write_files:
+  - path: /home/opc/docker-compose.yml
+    owner: opc:opc
+    permissions: '0644'
+    content: |
+      version: '3'
+      services:
+        vaultwarden:
+          image: vaultwarden/server:latest
+          container_name: vaultwarden
+          restart: always
+          environment:
+            - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+          volumes:
+            - /home/opc/vw-data:/data
+        caddy:
+          image: caddy:2
+          container_name: caddy
+          restart: always
+          ports:
+            - 80:80
+            - 443:443
+          volumes:
+            - /home/opc/caddy:/usr/bin/caddy  # Your custom build of Caddy.
+            - /home/opc/Caddyfile:/etc/caddy/Caddyfile:ro
+            - /home/opc/caddy-config:/config
+            - /home/opc/caddy-data:/data
+          environment:
+            - DOMAIN=${caddy_domain_name}     # Your domain, prefixed with http or https.
+            - EMAIL=${caddy_acme_reg_email}   # The email address to use for ACME registration.
+            - DUCKDNS_TOKEN=${caddy_duckdns_token}  # Your Duck DNS token.
+            - LOG_FILE=/home/opc/vw_access.log
+
+  - path: /home/opc/Caddyfile
+    owner: opc:opc
+    permissions: '0644'
+    content: |
+      {$DOMAIN}:443 {
+        log {
+          level INFO
+          output file {$LOG_FILE} {
+            roll_size 10MB
+            roll_keep 10
+          }
+        }
+        # Use the ACME DNS-01 challenge to get a cert for the configured domain.
+        tls {
+          dns duckdns {$DUCKDNS_TOKEN}
+        }
+        # This setting may have compatibility issues with some browsers
+        # (e.g., attachment downloading on Firefox). Try disabling this
+        # if you encounter issues.
+        encode gzip
+        # Notifications redirected to the WebSocket server
+        reverse_proxy /notifications/hub vaultwarden:3012
+        # Proxy everything else to Rocket
+        reverse_proxy vaultwarden:80
+      }

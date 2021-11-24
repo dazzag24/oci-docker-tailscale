@@ -19,9 +19,13 @@ data "oci_identity_availability_domains" "ads" {
 } */
 
 data "template_file" "setup-docker-compose" {
-  template = file("./user_data/oci-init.yaml.tpl")  
+  #template = file("./user_data/oci-init.yaml.tpl")  
+  template = file("./user_data/vaultwarden.tpl")  
   vars = {
     tailscale_key = var.tailscale_key
+    caddy_domain_name = var.caddy_domain_name
+    caddy_acme_reg_email = var.caddy_acme_reg_email
+    caddy_duckdns_token = var.caddy_duckdns_token
   }
 } 
 

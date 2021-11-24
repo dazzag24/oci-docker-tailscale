@@ -40,10 +40,19 @@ users:
     - name: opc
       groups: docker
 
+output : { all : '| tee -a /var/log/cloud-init-output.log' }
+
 runcmd:
-  - service docker start 
-  - service tailscaled start
-  - [ tailscale, up, --authkey, "${tailscale_key}" ]
-  - python3.6 -m pip install -U pip 
-  - python3.6 -m pip install setuptools cryptography docker-compose
-  - touch ~opc/userdata.`date +%s`.end
+  - [ service, docker, start ] 
+  - [ systemctl, enable, --now, tailscaled ]
+  #- [ tailscale, up, --authkey, "${tailscale_key}" ]
+  - [ wget, -O, /home/opc/caddy, "https://caddyserver.com/api/download?os=linux&arch=arm64&p=github.com%2Fcaddy-dns%2Fduckdns&idempotency=54695838413980" ]
+  - [ chmod, a+x, /home/opc/caddy ]
+  - [ chown, opc:opc, /home/opc/caddy ]
+  - [ python3.6, -m, pip, install, -U, pip ]
+  - [ su, opc, -c, "python3.6 -m pip install setuptools cryptography docker-compose" ]
+  - [ su, opc, -c, "docker pull vaultwarden/server:latest" ]
+  #- [ docker-compose, up, -d ]
+
+final_message: "The system is finally up, after $UPTIME seconds"
+
