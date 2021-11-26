@@ -16,4 +16,9 @@ We also install tailscale because it will allow us to access vaultwaden without 
 https://gist.github.com/RagedUnicorn/a70f8540c68e0a41e3e097a2e29130f1
 
 
+## OCI CLI
+
+https://learncodeshare.net/2020/03/06/install-and-configure-the-oracle-cloud-command-line-interface/
+
+
 

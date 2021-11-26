@@ -113,3 +113,7 @@ write_files:
         # Proxy everything else to Rocket
         reverse_proxy vaultwarden:80
       }
+
+
+
+      #- docker run -d --name vaultwarden -v ~/vw-data/:/data/ -p 80:80 vaultwarden/server:latest
