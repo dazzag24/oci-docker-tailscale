@@ -10,10 +10,19 @@ caddy
 
 We also install tailscale because it will allow us to access vaultwaden without using an public IP.
 
+https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/tf-provider/01-summary.htm
 
 ## Notes
 
+Debugging cloud-init
 https://gist.github.com/RagedUnicorn/a70f8540c68e0a41e3e097a2e29130f1
+
+```
+sudo cat /var/log/cloud-init-output.log
+sudo cat /var/log/cloud-init.log
+
+Issues with cloud-init write_files feature:
+https://discuss.linuxcontainers.org/t/cloud-config-write-files-only-writing-the-first-file-in-config/10920/7
 
 
 ## OCI CLI

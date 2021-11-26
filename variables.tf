@@ -13,7 +13,7 @@ variable "instance_shape_config_memory_in_gbs" {
 variable "tenancy_ocid" {
   type = string
 }
-variable "vnic_subsetid" {
+variable "vnic_subnetid" {
   type = string
 }
 variable "user_ocid" {

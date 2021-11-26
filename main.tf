@@ -34,7 +34,7 @@ resource "oci_core_instance" "ampere_instance" {
     compartment_id = var.tenancy_ocid
     
     # Display name of instance
-    display_name = "test-ampere-instance"
+    display_name = "vaultwarden-ampere"
     shape = "VM.Standard.A1.Flex"
     shape_config {
         # baseline_ocpu_utilization = var.instance_shape_config_baseline_ocpu_utilization
@@ -49,8 +49,8 @@ resource "oci_core_instance" "ampere_instance" {
     # Optional - Public Subnet of VNIC that has already been created.
     create_vnic_details {
         assign_public_ip = true
-        hostname_label = "ampere"
-        subnet_id = var.vnic_subsetid
+        hostname_label = "vaultwarden"
+        subnet_id = var.vnic_subnetid
     }
 
     metadata = {

@@ -85,7 +85,7 @@ write_files:
           - 80:80
           - 443:443
         volumes:
-          - /home/ubuntu/caddy:/usr/bin/caddy  # Your custom build of Caddy.
+          - /usr/local/bin/caddy:/usr/bin/caddy  # Your custom build of Caddy.
           - /home/ubuntu/Caddyfile:/etc/caddy/Caddyfile:ro
           - /home/ubuntu/caddy-config:/config
           - /home/ubuntu/caddy-data:/data
@@ -97,11 +97,15 @@ write_files:
 
 runcmd:
   - touch /home/ubuntu/userdata.`date --iso-8601=seconds`.start
-  #- tailscale up -authkey ${tailscale_key}
+  - tailscale up -authkey ${tailscale_key}
   - wget -O /usr/local/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=arm64&p=github.com%2Fcaddy-dns%2Fduckdns&idempotency=54695838413980"
   - chmod a+x /usr/local/bin/caddy 
   - mkdir /home/ubuntu/vw-data
-  #- docker run -d --name vaultwarden -v /home/ubuntu/vw-data/:/data/ -p 80:80 vaultwarden/server:latest
+  - mkdir /home/ubuntu/caddy-config
+  - mkdir /home/ubuntu/caddy-data
+  - cloud-init single --name write_files --frequency once
+  - chown -R ubuntu:ubuntu /home/ubuntu
+  - sudo ubuntu -c 'docker-compose up -d -f /home/ubuntu/docker-compose.yaml'
   - touch /home/ubuntu/userdata.`date --iso-8601=seconds`.end
 final_message: "The system setup is complete. Duration: $UPTIME seconds"
 
