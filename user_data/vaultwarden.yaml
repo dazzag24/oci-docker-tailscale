@@ -1,0 +1,42 @@
+#cloud-config
+# this variant installs docker as well as tailscale
+---
+ssh_pwauth: false
+apt:
+  sources:
+    tailscale.list:
+      source: deb https://pkgs.tailscale.com/stable/ubuntu focal main
+      keyid: 2596A99EAAB33821893C0A79458CA832957F5868
+    docker.list:
+      source: deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
+      keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+package_upgrade: true      
+packages: 
+  - docker-ce
+  - docker-ce-cli
+  - docker-compose
+  - tailscale
+# create the docker group
+groups:
+    - docker
+# Add default auto created user to docker group
+system_info:
+    default_user:
+        groups: [docker]
+# assign a VM's default user, which is ubuntu, to the docker group
+users:
+    - default
+    - name: ubuntu
+      groups: docker
+output : { all : '| tee -a /var/log/cloud-init-output.log' }
+runcmd:
+  - touch /home/ubuntu/userdata.`date --iso-8601=seconds`.start
+  #- tailscale up -authkey ${tailscale_key}
+  - wget -O /usr/local/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=arm64&p=github.com%2Fcaddy-dns%2Fduckdns&idempotency=54695838413980"
+  - chmod a+x /usr/local/bin/caddy 
+  - mkdir /home/ubuntu/vw-data
+  - docker run -d --name vaultwarden -v /home/ubuntu/vw-data/:/data/ -p 80:80 vaultwarden/server:latest
+  - touch /home/ubuntu/userdata.`date --iso-8601=seconds`.end
+final_message: "The system setup is complete. Duration: $UPTIME seconds"
+
+

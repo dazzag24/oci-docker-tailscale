@@ -18,9 +18,8 @@ data "oci_identity_availability_domains" "ads" {
   value = data.oci_identity_availability_domains.ads.availability_domains
 } */
 
-data "template_file" "setup-docker-compose" {
-  #template = file("./user_data/oci-init.yaml.tpl")  
-  template = file("./user_data/vaultwarden.tpl")  
+data "template_file" "setup-vaultwarden" {
+  template = file("./user_data/vaultwarden.yaml")  
   vars = {
     tailscale_key = var.tailscale_key
     caddy_domain_name = var.caddy_domain_name
@@ -55,7 +54,7 @@ resource "oci_core_instance" "ampere_instance" {
     }
 
     metadata = {
-        user_data = base64encode(data.template_file.setup-docker-compose.rendered)
+        user_data = base64encode(data.template_file.setup-vaultwarden.rendered)
         ssh_authorized_keys = var.ssh_public_key
     }
     preserve_boot_volume = false
