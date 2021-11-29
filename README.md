@@ -47,3 +47,7 @@ or via Python API:
 https://github.com/oracle/oci-python-sdk/blob/master/examples/get_all_instance_ip_addresses_and_dns_info.py
 
 
+# Ingress rules
+https://blog.gleb.ca/2021/08/03/terraform-modules-simplified/
+
+

@@ -40,7 +40,10 @@ variable "tailscale_key" {
 variable "os_image_source_id" {
   type = string
 }
-variable "caddy_duckdns_token" {
+variable "duckdns_token" {
+  type = string
+}
+variable "duckdns_domain" {
   type = string
 }
 variable "caddy_acme_reg_email" {

@@ -24,7 +24,8 @@ data "template_file" "setup-vaultwarden" {
     tailscale_key = var.tailscale_key
     caddy_domain_name = var.caddy_domain_name
     caddy_acme_reg_email = var.caddy_acme_reg_email
-    caddy_duckdns_token = var.caddy_duckdns_token
+    duckdns_token = var.duckdns_token
+    duckdns_domain = var.duckdns_domain
   }
 } 
 

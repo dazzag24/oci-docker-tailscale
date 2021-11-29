@@ -9,6 +9,7 @@ ssh_public_key =  "<Contents of SSH Public key>"
 ssh_private_key = <Path to SSH Private key>"
 # Not sure how you can find the image source IDs easily. I had to use the console to create an instance
 os_image_source_id = "ocid1.image.oc1.uk-london-1.aaaaaaaaglaxkbuflw642jnmdcvdilcnamnzr4zln45fmflx6l7c33qgpuha"
-caddy_duckdns_token = "<Your https://www.duckdns.org API token>"
+duckdns_token = "<Your https://www.duckdns.org API token>"
+duckdns_domain = "<Your duckdns.org domain here>.duckdns.org"
 caddy_domain_name = "http(s)://<Your duckdns.org domain here>.duckdns.org"
 caddy_acme_reg_email = "<duckdns.org user email address>"
